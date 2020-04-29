@@ -28,8 +28,8 @@ contract BasMarket is ManagedByDAO{
         token           = ERC20(_t);
         rootDomainData  = BasRootDomain(_rd);
         subDomainData   = BasSubDomain(_sd);
-        require(address(rootDomainData.ownership) ==
-                address(subDomainData.ownership), "domain contract deploy error");
+        require(address(rootDomainData.ownership()) ==
+                address(subDomainData.ownership()), "domain contract deploy error");
         ownership       = BasTradableOwnership(address(rootDomainData.ownership));            
     }
 
