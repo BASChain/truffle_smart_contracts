@@ -1,0 +1,1 @@
+cp  -r ./build/contracts/  package
