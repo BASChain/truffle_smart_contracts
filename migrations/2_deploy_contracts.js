@@ -11,6 +11,7 @@ const BasMarket = artifacts.require("BasMarket");
 const BasMail = artifacts.require("BasMail");
 const BasMailManager = artifacts.require("BasMailManager");
 
+const fs = require("fs");
 
 module.exports = function(deployer, network, accounts){
 
@@ -61,5 +62,86 @@ module.exports = function(deployer, network, accounts){
             m.addDataKeeper(acc.address);
             mail.addDataKeeper(mm.address);
             exo.addDataKeeper(mail.address);
+        }).then(function(){
+//-----log contract addresses, use for code copy, 
+            console.log("---------addresses---------\n");
+            console.log("let BasToken_addr = \"" + t.address +"\"");
+            console.log("let BasExpiredOwnership_addr = \"" + exo.address + "\"");
+            console.log("let BasTradableOwnership_addr = \"" + tro.address + "\"");
+            console.log("let BasRootDomain_addr = \"" + rd.address + "\"");
+            console.log("let BasSubDomain_addr = \"" + sd.address + "\"");
+            console.log("let BasDomainConf_addr = \"" + dc.address + "\"");
+            console.log("let BasAccountant_addr = \"" + acc.address + "\"");
+            console.log("let BasMiner_addr = \"" + m.address + "\"");
+            console.log("let BasOANN_addr = \"" + oann.address + "\"");
+            console.log("let BasMarket_addr = \"" + market.address + "\"");
+            console.log("let BasMail_addr = \"" + mail.address + "\"");
+            console.log("let BasMailManager_addr = \"" + mm.address + "\"");
+
+//-----write accounts-------
+            fs.writeFile('package/accounts.json',JSON.stringify(accounts),function(err){
+                if (err) {console.log(err)}
+            });
+
+//------generate abi files to traget path
+            const BasToken_abi = require("../build/contracts/BasToken.json").abi;
+            fs.writeFile('package/abi/BasToken.json',JSON.stringify(BasToken_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasExpiredOwnership_abi = require("../build/contracts/BasExpiredOwnership.json").abi;
+            fs.writeFile('package/abi/BasExpiredOwnership.json',JSON.stringify(BasExpiredOwnership_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasTradableOwnership_abi = require("../build/contracts/BasTradableOwnership.json").abi;
+            fs.writeFile('package/abi/BasTradableOwnership.json',JSON.stringify(BasTradableOwnership_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasRootDomain_abi = require("../build/contracts/BasRootDomain.json").abi;
+            fs.writeFile('package/abi/BasRootDomain.json',JSON.stringify(BasRootDomain_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasSubDomain_abi = require("../build/contracts/BasSubDomain.json").abi;
+            fs.writeFile('package/abi/BasSubDomain.json',JSON.stringify(BasSubDomain_abi),function(err){
+                if (err) {console.log(err)}
+            });
+            
+            const BasDomainConf_abi = require("../build/contracts/BasDomainConf.json").abi;
+            fs.writeFile('package/abi/BasDomainConf.json',JSON.stringify(BasDomainConf_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasAccountant_abi = require("../build/contracts/BasAccountant.json").abi;
+            fs.writeFile('package/abi/BasAccountant.json',JSON.stringify(BasAccountant_abi),function(err){
+                if (err) {console.log(err)}
+            });
+            
+            const BasMiner_abi = require("../build/contracts/BasMiner.json").abi;
+            fs.writeFile('package/abi/BasMiner.json',JSON.stringify(BasMiner_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasOANN_abi = require("../build/contracts/BasOANN.json").abi;
+            fs.writeFile('package/abi/BasOANN.json',JSON.stringify(BasOANN_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasMarket_abi = require("../build/contracts/BasMarket.json").abi;
+            fs.writeFile('package/abi/BasMarket.json',JSON.stringify(BasMarket_abi),function(err){
+                if (err) {console.log(err)}
+            });
+
+            const BasMail_abi = require("../build/contracts/BasMail.json").abi;
+            fs.writeFile('package/abi/BasMail.json',JSON.stringify(BasMail_abi),function(err){
+                if (err) {console.log(err)}
+            });
+            
+            const BasMailManager_abi = require("../build/contracts/BasMailManager.json").abi;
+            fs.writeFile('package/abi/BasMailManager.json',JSON.stringify(BasMailManager_abi),function(err){
+                if (err) {console.log(err)}
+            });
         })
 }

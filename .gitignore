@@ -26,3 +26,5 @@ yarn.lock
 package.json
 node_modules
 build/
+main.js
+accounts.json
