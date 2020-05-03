@@ -10,6 +10,7 @@ const BasOANN = artifacts.require("BasOANN");
 const BasMarket = artifacts.require("BasMarket");
 const BasMail = artifacts.require("BasMail");
 const BasMailManager = artifacts.require("BasMailManager");
+const BasView = artifacts.require("BasView");
 
 const fs = require("fs");
 
@@ -33,7 +34,7 @@ module.exports = function(deployer, network, accounts){
             sd = instance;
             return deployer.deploy(BasDomainConf, tro.address);
         }).then(function(instance){
-            dc = instance;
+            conf = instance;
             return deployer.deploy(BasAccountant);
         }).then(function(instance){
             acc = instance;
@@ -53,33 +54,64 @@ module.exports = function(deployer, network, accounts){
                sd.address, mail.address);
         }).then(function(instance){
             mm = instance;
+            return deployer.deploy(BasView);
+        }).then(function(instance){
+            view = instance;
+
 //----link sequence----
+
+            view.setAddresses(
+                t.address,
+                exo.address,
+                tro.address,
+                rd.address,
+                sd.address,
+                conf.address,
+                acc.address,
+                m.address,
+                oann.address,
+                market.address,
+                mail.address,
+                mm.address
+            )
+            
+            
             tro.addDataKeeper(rd.address);
             tro.addDataKeeper(sd.address);
             tro.addDataKeeper(market.address);
+            rd.addDataKeeper(oann.address);
+            sd.addDataKeeper(oann.address);
             acc.addDataKeeper(oann.address);
             acc.addDataKeeper(mm.address);
+            acc.registerContractReceiver("miner",m.address);
             m.addDataKeeper(acc.address);
             mail.addDataKeeper(mm.address);
             exo.addDataKeeper(mail.address);
         }).then(function(){
-//-----log contract addresses, use for code copy, 
-            console.log("---------addresses---------\n");
-            console.log("let BasToken_addr = \"" + t.address +"\"");
-            console.log("let BasExpiredOwnership_addr = \"" + exo.address + "\"");
-            console.log("let BasTradableOwnership_addr = \"" + tro.address + "\"");
-            console.log("let BasRootDomain_addr = \"" + rd.address + "\"");
-            console.log("let BasSubDomain_addr = \"" + sd.address + "\"");
-            console.log("let BasDomainConf_addr = \"" + dc.address + "\"");
-            console.log("let BasAccountant_addr = \"" + acc.address + "\"");
-            console.log("let BasMiner_addr = \"" + m.address + "\"");
-            console.log("let BasOANN_addr = \"" + oann.address + "\"");
-            console.log("let BasMarket_addr = \"" + market.address + "\"");
-            console.log("let BasMail_addr = \"" + mail.address + "\"");
-            console.log("let BasMailManager_addr = \"" + mm.address + "\"");
+//-----create ganache address files for debug purpose
+
+            let addresses = {
+                BasToken_addr                   : t.address,
+                BasExpiredOwnership_addr        : exo.address,
+                BasTradableOwnership_addr       : tro.address,
+                BasRootDomain_addr              : rd.address,
+                BasSubDomain_addr               : sd.address,
+                BasDomainConf_addr              : conf.address,
+                BasAccountant_addr              : acc.address,
+                BasMiner_addr                   : m.address,
+                BasOANN_addr                    : oann.address,
+                BasMarket_addr                  : market.addrrss,
+                BasMail_addr                    : mail.address,
+                BasMailManager_addr             : mm.address,
+                BasView_addr                    : view.address,
+            }
+            
+            fs.writeFile('package/ganache_address.json',JSON.stringify(addresses),function(err){
+                if (err) {console.log(err)}
+            });
 
 //-----write accounts-------
-            fs.writeFile('package/accounts.json',JSON.stringify(accounts),function(err){
+            fs.writeFile('package/ganache_accounts.json',JSON.stringify(accounts),function(err){
                 if (err) {console.log(err)}
             });
 
@@ -143,5 +175,11 @@ module.exports = function(deployer, network, accounts){
             fs.writeFile('package/abi/BasMailManager.json',JSON.stringify(BasMailManager_abi),function(err){
                 if (err) {console.log(err)}
             });
+
+            const BasView_abi = require("../build/contracts/BasView.json").abi;
+            fs.writeFile('package/abi/BasView.json',JSON.stringify(BasView_abi),function(err){
+                if (err) {console.log(err)}
+            });
+            
         })
 }

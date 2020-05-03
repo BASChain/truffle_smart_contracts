@@ -81,7 +81,7 @@ library BasSet{
                     internal {
 
         uint32 idx = ia.idx[hash];
-        require((idx == 0 && ia.assets[0] != hash) || ia.assets.length == 0);
+        require(ia.assets.length == 0 || (idx == 0 && ia.assets[0] != hash));
 
         ia.idx[hash] = uint32(ia.assets.length);
         ia.assets.push(hash);

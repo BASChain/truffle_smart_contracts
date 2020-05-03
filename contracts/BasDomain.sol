@@ -254,6 +254,10 @@ contract BasRootDomain is BasDomain {
         
     }
     
+    function testCallThroughOwnership(bytes32 nameHash) external view returns (address){
+        return ownership.ownerOf(nameHash);
+    }
+    
     /*
     anyone can recharge a domain
     if domain is expired, charged time will be added to now
